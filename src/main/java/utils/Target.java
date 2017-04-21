@@ -1,5 +1,7 @@
 package utils;
 
+import map.GameMap;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -22,7 +24,7 @@ public  class Target {
 
         for (int i = 0; i < map.size(); i++) {
 
-             if (map.get(i) != 1) {   //проверяем только стены ==2
+             if (map.get(i) == GameMap.WALL) {   //проверяем только стены ==2
 
                 int XX, YY;
                  if (i > XXMap - 1) {            //если И больше дленны мапы по У

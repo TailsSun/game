@@ -8,9 +8,9 @@ import java.io.IOException;
  * Created by DNS on 11.04.2017.
  */
 public class CutTexture {
-    BufferedImage img;
+    public BufferedImage img;
 
-    public CutTexture(String imageName) {
+    public  CutTexture(String imageName) {
         try {
             img = ImgLoader.loadImg(imageName);
         } catch (IOException e) {

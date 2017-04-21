@@ -2,6 +2,8 @@ package game;
 
 import bullet.BuletGG;
 import displey.Displey;
+import enemy.Enemy;
+import enemy.GraphisEn;
 import grafika.CutTexture;
 import keyboard.Keyboard;
 import map.GameMap;
@@ -27,6 +29,8 @@ public class Game implements Runnable{
 
     double x = 100;
     double y = 100;
+
+
     //temp
 
     public static final int width = 800;
@@ -47,17 +51,18 @@ public class Game implements Runnable{
 */
     public static final String fileNameGG = "robo.jpg";
     public static final String buletGG = "bah1.jpg";
+    public static final String enemyPic = "vrag.png";
     public static  int widthGG = 22;
     public static  int heightGG = 22;
     GameMap gameMap;
-    Target target;
+    Enemy enemy;
 
 
     private boolean	running;
     private Thread gameThread;
     private Graphics2D graphics;
     private Keyboard keyboard;
-    private CutTexture GG;
+    private CutTexture cutTexture;
 
 
     public Game(){
@@ -66,7 +71,7 @@ public class Game implements Runnable{
         graphics = Displey.getGraphics();
         keyboard = new Keyboard();
         Displey.addKeyboard(keyboard);
-        GG = new CutTexture(fileNameGG);
+        cutTexture = new CutTexture(fileNameGG);
         gameMap = new GameMap();
 
 
@@ -94,7 +99,7 @@ public class Game implements Runnable{
     }
 
     private void update(){
-        boolean L, R, U, D;
+
         if (keyboard.getKey(KeyEvent.VK_UP) && keyboard.getKey(KeyEvent.VK_RIGHT)||
                 keyboard.getKey(KeyEvent.VK_UP) && keyboard.getKey(KeyEvent.VK_LEFT)||
                 keyboard.getKey(KeyEvent.VK_DOWN) && keyboard.getKey(KeyEvent.VK_RIGHT) ||
@@ -155,10 +160,18 @@ public class Game implements Runnable{
             }
         }
 
+        if (Enemy.getEnemieList() != null){
+            for (Enemy enemy:Enemy.getEnemieList()){
+                enemy.update();
+            }
+        }
+
+        Enemy.updata();
+
+
+
 
     }
-
-
 
     private void render(){
         Displey.clear();
@@ -166,16 +179,18 @@ public class Game implements Runnable{
         gameMap.draw(graphics);
 
         // gg
-        BufferedImage h = GG.cut(18,21,44,44);
-        /*h.getScaledInstance(20,20,2)*/
-
+        BufferedImage h = cutTexture.cut(18,21,44,44);
         graphics.drawImage(h.getScaledInstance(widthGG,widthGG,2),(int)x,(int)y,null);
 
         //patroshki
-        BufferedImage imgBuletGG = GG.cut(50,50,80,80);
+        BufferedImage imgBuletGG = cutTexture.cut(50,50,80,80);
         for (BuletGG buletGG:buletsGG){
             buletGG.draw(graphics);
         }
+
+        // enemy
+
+        GraphisEn.draw(graphics);
 
         Displey.swapBuffers();
     }

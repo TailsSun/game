@@ -11,12 +11,12 @@ import java.io.IOException;
 public class ImgLoader {
     public static final String direktory = "resources/";
     public static BufferedImage loadImg(String fileName) throws IOException {
-        BufferedImage img;
-        /*try {*/
+        BufferedImage img = null;
+        try {
             img = ImageIO.read(new File(direktory  + fileName));
-       /* } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
         return img;
     }
 }

@@ -8,10 +8,14 @@ import static game.Game.width;
 
 /**
  * Created by DNS on 14.04.2017.
+ * Карта, объектов и ланшафта
  */
 public class GameMap {
 
     public static final int lengthKub = 100;
+    private static final int PercentageImpassableObjects = 15;
+    public static final int WALL = 2;
+    public static final int NOT_WALL = 1;
 
     public static ArrayList<Integer> map = new ArrayList<>();
     private static int XXMap = width/lengthKub;      //длинна мапы по Х
@@ -38,10 +42,10 @@ public class GameMap {
 
         for (int x = 0; x < S; x++){
             final double rnd = Math.random()*100;
-            if (rnd < 15){
-                map.add(2);
+            if (rnd < PercentageImpassableObjects){
+                map.add(WALL);
             }
-            else map.add(1);
+            else map.add(NOT_WALL);
            /* if (x ==80){
                 map.add(2);
             }
@@ -54,7 +58,7 @@ public class GameMap {
 
         for(int i = 0; i < map.size(); i++) {
             graf.setColor(Color.MAGENTA);
-            if (map.get(i) == 2){
+            if (map.get(i) == WALL){
                 int XX,YY;
 
                 if (i > XXMap - 1) {            //если И больше дленны мапы по У

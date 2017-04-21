@@ -12,6 +12,12 @@ import static game.Game.width;
  * Created by DNS on 12.04.2017.
  */
 public class  BuletGG{
+    public static final byte directionLeft = 1;
+    public static final byte directionRight = 2;
+    public static final byte directionUp = 4;
+    public static final byte directionDown = 3;
+
+
     private double x;
     private  double y;
     private int r;
@@ -27,7 +33,7 @@ public class  BuletGG{
         this.y = y;
         this.nap = i;
 
-        if(i == 1 || i == 4) {
+        if(i == directionLeft || i == directionUp) {
             speed = -speed; //left
         }
 
@@ -35,7 +41,7 @@ public class  BuletGG{
     }
 
     /*@Override*/
-    public boolean removeOut(ArrayList map) {
+    public boolean removeOut(ArrayList<Integer> map) {
 
 
         if (target.target(x,y,r,map)){
@@ -48,8 +54,8 @@ public class  BuletGG{
 
 
     public void update(){
-        if (nap == 1 || nap == 2)x += speed;
-        if (nap == 3 || nap == 4)y += speed;
+        if (nap == directionLeft || nap == directionRight)x += speed;
+        if (nap == directionDown || nap == directionUp)y += speed;
 
     }
     public double getX(){

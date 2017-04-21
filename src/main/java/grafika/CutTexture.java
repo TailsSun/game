@@ -7,10 +7,10 @@ import java.io.IOException;
 /**
  * Created by DNS on 11.04.2017.
  */
-public class TextureGG {
+public class CutTexture {
     BufferedImage img;
 
-    public TextureGG(String imageName) {
+    public CutTexture(String imageName) {
         try {
             img = ImgLoader.loadImg(imageName);
         } catch (IOException e) {

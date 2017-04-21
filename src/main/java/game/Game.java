@@ -2,7 +2,7 @@ package game;
 
 import bullet.BuletGG;
 import displey.Displey;
-import grafika.TextureGG;
+import grafika.CutTexture;
 import keyboard.Keyboard;
 import map.GameMap;
 import utils.Target;
@@ -57,7 +57,7 @@ public class Game implements Runnable{
     private Thread gameThread;
     private Graphics2D graphics;
     private Keyboard keyboard;
-    private TextureGG GG;
+    private CutTexture GG;
 
 
     public Game(){
@@ -66,7 +66,7 @@ public class Game implements Runnable{
         graphics = Displey.getGraphics();
         keyboard = new Keyboard();
         Displey.addKeyboard(keyboard);
-        GG = new TextureGG(fileNameGG);
+        GG = new CutTexture(fileNameGG);
         gameMap = new GameMap();
 
 
@@ -107,27 +107,27 @@ public class Game implements Runnable{
         if (keyboard.getKey(KeyEvent.VK_UP)){
             if(!Target.target(x,y - 5,widthGG,gameMap.getMap())) {
                 YY = -speed;
-                i = 4;
+                i = BuletGG.directionUp;
             }
         }
         if (keyboard.getKey(KeyEvent.VK_RIGHT)) {
             if(!Target.target(x + 5,y,widthGG,gameMap.getMap())) {
                 XX = speed;
-                i = 2;
+                i = BuletGG.directionRight;
             }
         }
 
         if (keyboard.getKey(KeyEvent.VK_DOWN)) {
             if(!Target.target(x, y + 5,widthGG,gameMap.getMap())) {
                 YY = speed;
-                i = 3;
+                i = BuletGG.directionDown;
             }
         }
 
         if (keyboard.getKey(KeyEvent.VK_LEFT)) {
             if(!Target.target(x - 5,y,widthGG,gameMap.getMap())) {
                 XX = -speed;
-                i = 1;
+                i = BuletGG.directionLeft;
             }
         }
         y += YY;

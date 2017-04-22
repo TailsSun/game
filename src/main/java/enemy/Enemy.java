@@ -1,5 +1,7 @@
 package enemy;
 
+import event.EventEnemy;
+
 import java.util.ArrayList;
 
 /**
@@ -39,6 +41,7 @@ public class Enemy {
         return enemieList;
     }
     public void update(){
+        EventEnemy.eventSpawnEn();
         if (!ifDetectedGG){
 
         }
@@ -46,8 +49,10 @@ public class Enemy {
     }
 
     public void remuve(ArrayList<Enemy> list){
-        for(int x = 0; x > list.size();x++){
+        if(list != null && !list.isEmpty()) {
+            for (int x = 0; x > list.size(); x++) {
 
+            }
         }
 
     }

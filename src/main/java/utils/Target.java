@@ -40,9 +40,9 @@ public  class Target {
                  XX = XX * lengthKub;
                  YY = YY * lengthKub;
 
-                 Rectangle rectMap = new Rectangle(XX,YY,lengthKub,lengthKub);
-                 Rectangle rectBul = new Rectangle((int)x, (int)y,r,r);
-                 if (rectMap.intersects(rectBul)) return true;
+                 Rectangle rectMap = new Rectangle(XX,YY,lengthKub,lengthKub);  // квадрат карты
+                 Rectangle rectBul = new Rectangle((int)x, (int)y,r,r);         // квадрат пули
+                 if (rectMap.intersects(rectBul)) return true;                  //если квадрат карты соприскомается с пулей то тру
 
             }
         }

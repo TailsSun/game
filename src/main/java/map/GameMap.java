@@ -17,13 +17,13 @@ public class GameMap {
     public static final int WALL = 2;
     public static final int NOT_WALL = 1;
 
-    public static ArrayList<Integer> map = new ArrayList<>();
+    private static ArrayList<Integer> map = new ArrayList<>();
     private static int XXMap = width/lengthKub;      //длинна мапы по Х
     private static int YYMap  = height/lengthKub;   //Длинна мапы по У
     private int S = XXMap * YYMap;
 
 
-    public ArrayList<Integer> getMap() {
+    public static ArrayList<Integer> getMap() {
         return map;
     }
 

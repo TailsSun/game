@@ -160,7 +160,7 @@ public class Game implements Runnable{
             }
         }
 
-        if (Enemy.getEnemieList() != null){
+        if (Enemy.getEnemieList() != null && !Enemy.getEnemieList().isEmpty()){
             for (Enemy enemy:Enemy.getEnemieList()){
                 enemy.update();
             }

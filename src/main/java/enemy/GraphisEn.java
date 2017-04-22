@@ -20,7 +20,7 @@ public class GraphisEn {
 
 
     public static void draw(Graphics2D graphics) {
-        if(Enemy.getEnemieList() != null) {
+        if(Enemy.getEnemieList() != null && !Enemy.getEnemieList().isEmpty()) {
             for (Enemy enemy:Enemy.getEnemieList()) {
                 double x = enemy.getX();
                 double y = enemy.getY();

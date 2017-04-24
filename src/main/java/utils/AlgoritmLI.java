@@ -38,14 +38,7 @@ public class AlgoritmLI {
     public static void main(String[] args) {
         GameMap gameMap = new GameMap();
         int q = XXMap - 1;
-        for (int i = 0; i < gameMap.getMap().size(); i ++ ) {
 
-            System.out.print(gameMap.getMap().get(i) + " ");
-            if (i == q) {
-                System.out.println();
-                q = q + XXMap;
-            }
-        }
         AlgoritmLI li = new AlgoritmLI();
         li.Init_massiv(MAX_SPEED_EN);
 
@@ -54,9 +47,17 @@ public class AlgoritmLI {
         int end [] = {19,14};
 
         if(li.OsnovnoiMetod(mas,li.getMassiv(),end)){
-            System.out.println(li.PostroenieMarshruta(mas,li.getMassiv(),end));
+            ArrayList<int[]> peremennaya = new ArrayList<int[]>(li.PostroenieMarshruta(mas,li.getMassiv(),end));
+
+            for (int[] res: peremennaya){
+                for (int result:res){
+                    System.out.print(result+ "  ");
+                }
+                System.out.println();
+            }
 
         }
+
 
 
 
@@ -91,9 +92,6 @@ public class AlgoritmLI {
                         if (i > XXMap - 1) {
                             YY = i / (XXMap);
                         } else YY = 0;
-/*
-                        System.out.println("квадрат мапы "+ (i + 1) + "  " + (XX * raznica+ x) + "   " + (YY * raznica + y));
-*/
 
                          massiv[XX * raznica+ x][YY * raznica + y] = WALL;
                     }
@@ -104,7 +102,10 @@ public class AlgoritmLI {
     }
 
 
-    private boolean OsnovnoiMetod(int []vershina, double [][]massiv, int []end) {
+    private boolean OsnovnoiMetod(int []vers, double [][]massiv, int []end) {
+        int []vershina = new int[2];
+        vershina[0] = vers[0];
+        vershina[1] = vers[1];
         massiv[0][0] = 1;
         while (true) {
             for (int i = 0; i < SHIRINA_MASSIVA; i++) {
@@ -124,9 +125,7 @@ public class AlgoritmLI {
             if (!izmeneniya){
                 chen++;
                 if (chen > 11){
-                    System.out.println(znachenie);
                     System.out.println("Изменений нет !!!!");
-                    print(massiv);
                     return false;
                 }
 
@@ -204,154 +203,164 @@ public class AlgoritmLI {
     }
 
     private ArrayList<int[]> PostroenieMarshruta(int []vershina, double [][]massiv, int []end){
-        int x = end[0];
-        int y = end[1];
-
-        int leftt [] = {x-1 , y};
-        int rightt [] = {x + 1 , y};
-        int upp [] = {x , y - 1};
-        int downn [] = {x , y + 1};
-        int downRightt [] = {x + 1 , y + 1};
-        int downLeftt [] = {x - 1 , y + 1};
-        int upRightt [] = {x + 1, y - 1};
-        int upLeftt [] = {x - 1, y - 1};
+        marshrut = new ArrayList<int[]>();
+        marshrut.add(end.clone()); // todo
+        while (!Arrays.equals(vershina, end)) {
 
 
+            int x = end[0];
+            int y = end[1];
+
+            int leftt[] = {x - 1, y};
+            int rightt[] = {x + 1, y};
+            int upp[] = {x, y - 1};
+            int downn[] = {x, y + 1};
+            int downRightt[] = {x + 1, y + 1};
+            int downLeftt[] = {x - 1, y + 1};
+            int upRightt[] = {x + 1, y - 1};
+            int upLeftt[] = {x - 1, y - 1};
+
+            if (y == 0 && x < DLINNA_MASSIVA - 1 && x > 0) {
+                if (left(x, y) < downLeft(x, y) && left(x, y) < down(x, y) && left(x, y) < downRight(x, y) && left(x, y) < right(x, y)) { // left
+                    marshrut.add( leftt);
+                }
+                if (right(x, y) < left(x, y) && right(x, y) < downLeft(x, y) && right(x, y) < downRight(x, y) && right(x, y) < down(x, y)) { // right
+                    marshrut.add( rightt);
+                }
+                if (down(x, y) < left(x, y) && down(x, y) < downLeft(x, y) && down(x, y) < downRight(x, y) && down(x, y) < right(x, y)) { // down
+                    marshrut.add(downn);
+                }
+                if (downLeft(x, y) < left(x, y) && downLeft(x, y) < down(x, y) && downLeft(x, y) < downRight(x, y) && downLeft(x, y) < right(x, y)) { // downLeft
+                    marshrut.add( downLeftt);
+                }
+                if (downRight(x, y) < left(x, y) && downRight(x, y) < downLeft(x, y) && downRight(x, y) < down(x, y) && downRight(x, y) < right(x, y)) { // downRight
+                    marshrut.add( downRightt);
+                }
 
 
+            } else if (x == 0 && y < SHIRINA_MASSIVA - 1 && y > 0) {
+                if (right(x, y) < up(x, y) && right(x, y) < upRight(x, y) && right(x, y) < downRight(x, y) && right(x, y) < down(x, y)) { // right
+                    marshrut.add( rightt);
+                }
+                if (down(x, y) < up(x, y) && down(x, y) < upRight(x, y) && down(x, y) < right(x, y) && down(x, y) < downRight(x, y)) { // down
+                    marshrut.add( downn);
+                }
+                if (upRight(x, y) < up(x, y) && upRight(x, y) < right(x, y) && upRight(x, y) < downRight(x, y) && upRight(x, y) < down(x, y)) { // upRight
+                    marshrut.add( upRightt);
+                }
+                if (downRight(x, y) < up(x, y) && downRight(x, y) < upRight(x, y) && downRight(x, y) < right(x, y) && downRight(x, y) < down(x, y)) { // downRight
+                    marshrut.add(downRightt);
+                }
+            } else if (x == 0 && y == 0) {
+                if (right(x, y) < downRight(x, y) && right(x, y) < down(x, y)) { // right
+                    marshrut.add( rightt);
+                }
+                if (down(x, y) < right(x, y) && down(x, y) < downRight(x, y)) { // down
+                    marshrut.add( downn);
+                }
+                if (downRight(x, y) < right(x, y) && downRight(x, y) < down(x, y)) { // downRight
+                    marshrut.add( downRightt);
+                }
+            } else if (x == 0 && y == SHIRINA_MASSIVA - 1) {
+                if (right(x, y) < upRight(x, y) && left(x, y) < up(x, y)) { // right
+                    marshrut.add( rightt);
+                }
+                if (up(x, y) < upRight(x, y) && up(x, y) < right(x, y)) { // up
+                    marshrut.add( upp);
+                }
+                if (upRight(x, y) < up(x, y) && upRight(x, y) < right(x, y)) { // upRight
+                    marshrut.add( upRightt);
+                }
+            } else if (x > 0 && x < DLINNA_MASSIVA - 1 && y == SHIRINA_MASSIVA - 1) {
+                if (left(x, y) < upLeft(x, y) && left(x, y) < up(x, y) && left(x, y) < upRight(x, y) && left(x, y) < right(x, y)) { // left
+                    marshrut.add( leftt);
+                }
+                if (right(x, y) < left(x, y) && right(x, y) < upRight(x, y) && right(x, y) < up(x, y) && right(x, y) < upRight(x, y)) { // right
+                    marshrut.add( rightt);
+                }
+                if (upLeft(x, y) < left(x, y) && upLeft(x, y) < up(x, y) && upLeft(x, y) < upRight(x, y) && upLeft(x, y) < right(x, y)) { // upLeft
+                    marshrut.add( upLeftt);
+                }
+                if (upRight(x, y) < left(x, y) && upRight(x, y) < up(x, y) && upRight(x, y) < upLeft(x, y) && upRight(x, y) < right(x, y)) { // upRight
+                    marshrut.add( upRightt);
+                }
+                if (up(x, y) < left(x, y) && up(x, y) < upLeft(x, y) && up(x, y) < upRight(x, y) && up(x, y) < right(x, y)) { // up
+                    marshrut.add( upRightt);
+                }
+            } else if (x == DLINNA_MASSIVA - 1 && y == 0) {
+                if (left(x, y) < downLeft(x, y) && left(x, y) < down(x, y)) { // left
+                    marshrut.add( leftt);
+                }
+                if (down(x, y) < left(x, y) && down(x, y) < downLeft(x, y)) { // down
+                    marshrut.add( downn);
+                }
+                if (downLeft(x, y) < left(x, y) && downLeft(x, y) < down(x, y)) { // downLeft
+                    marshrut.add( downLeftt);
+                }
+            } else if (x == DLINNA_MASSIVA - 1 && y != 0 && y != SHIRINA_MASSIVA - 1) {
+                if (left(x, y) < downLeft(x, y) && left(x, y) < down(x, y) && left(x, y) < up(x, y) && left(x, y) < upLeft(x, y)) { // left
+                    marshrut.add( leftt);
+                }
+                if (downLeft(x, y) < left(x, y) && downLeft(x, y) < down(x, y) && downLeft(x, y) < up(x, y) && downLeft(x, y) < upLeft(x, y)) { // downLeft
+                    marshrut.add( downLeftt);
+                }
+                if (down(x, y) < left(x, y) && down(x, y) < downLeft(x, y) && down(x, y) < up(x, y) && down(x, y) < upLeft(x, y)) { // down
+                    marshrut.add( downn);
+                }
+                if (up(x, y) < upLeft(x, y) && up(x, y) < left(x, y) && up(x, y) < downLeft(x, y) && up(x, y) < down(x, y)) { // up
+                    marshrut.add( upp);
+                }
+                if (upLeft(x, y) < up(x, y) && upLeft(x, y) < left(x, y) && upLeft(x, y) < downLeft(x, y) && upLeft(x, y) < down(x, y)) { // upLeft
+                    marshrut.add( upLeftt);
+                }
+            } else if (x == DLINNA_MASSIVA - 1 && y == SHIRINA_MASSIVA - 1) {
+                if (up(x, y) < upLeft(x, y) && up(x, y) < left(x, y)) { // up
+                    marshrut.add( upp);
+                }
+                if (left(x, y) < upLeft(x, y) && left(x, y) < up(x, y)) { // left
+                    marshrut.add( leftt);
+                }
+                if (upLeft(x, y) < left(x, y) && upLeft(x, y) < up(x, y)) { // upLeft
+                    marshrut.add( upLeftt);
+                }
+            } else {
+                if (left(x, y) < downLeft(x, y) && left(x, y) < down(x, y) && left(x, y) < downRight(x, y) && left(x, y) < right(x, y) && left(x, y) < upRight(x, y) && left(x, y) < up(x, y) && left(x, y) < upLeft(x, y)) { // left
+                    marshrut.add( leftt);
+                }
+                else if (downLeft(x, y) < left(x, y) && downLeft(x, y) < down(x, y) && downLeft(x, y) < downRight(x, y) && downLeft(x, y) < right(x, y) && downLeft(x, y) < upRight(x, y) && downLeft(x, y) < up(x, y) && downLeft(x, y) < upLeft(x, y)) { // downLeft
+                    marshrut.add( downLeftt);
+                }
+                else if (down(x, y) < left(x, y) && down(x, y) < downLeft(x, y) && down(x, y) < downRight(x, y) && down(x, y) < right(x, y) && down(x, y) < upRight(x, y) && down(x, y) < up(x, y) && down(x, y) < upLeft(x, y)) { // down
+                    marshrut.add( downn);
+                }
+                else if (downRight(x, y) < left(x, y) && downRight(x, y) < downLeft(x, y) && downRight(x, y) < down(x, y) && downRight(x, y) < right(x, y) && downRight(x, y) < upRight(x, y) && downRight(x, y) < up(x, y) && downRight(x, y) < upLeft(x, y)) { // downRight
+                    marshrut.add( downRightt);
+                }
+                else if (right(x, y) < left(x, y) && right(x, y) < downLeft(x, y) && right(x, y) < down(x, y) && right(x, y) < downRight(x, y) && right(x, y) < upRight(x, y) && right(x, y) < up(x, y) && right(x, y) < upLeft(x, y)) { // right
+                    marshrut.add( rightt);
+                }
+                else if (upRight(x, y) < left(x, y) && upRight(x, y) < downLeft(x, y) && upRight(x, y) < down(x, y) && upRight(x, y) < downRight(x, y) && upRight(x, y) < right(x, y) && upRight(x, y) < up(x, y) && upRight(x, y) < upLeft(x, y)) { // upRight
+                    marshrut.add( upRightt);
+                }
+                else if (up(x, y) < left(x, y) && up(x, y) < downLeft(x, y) && up(x, y) < down(x, y) && up(x, y) < downRight(x, y) && up(x, y) < right(x, y) && up(x, y) < upRight(x, y) && up(x, y) < upLeft(x, y)) { // up
+                    marshrut.add( upp);
+                }
+                else if (upLeft(x, y) < left(x, y) && upLeft(x, y) < downLeft(x, y) && upLeft(x, y) < down(x, y) && upLeft(x, y) < downRight(x, y) && upLeft(x, y) < right(x, y) && upLeft(x, y) < upRight(x, y) && upLeft(x, y) < up(x, y)) { // upLeft
+                    marshrut.add( upLeftt);
+                }
 
 
-        if (y == 0 && x < DLINNA_MASSIVA -1 &&  x > 0 ) {
-            if (left(x,y) < downLeft(x,y) && left(x,y) < down(x,y) && left(x,y) <  downRight(x,y) && left(x,y) < right(x,y) ){ // left
-                marshrut.add(0,leftt);
             }
-            if (right(x,y) < left(x,y) && right(x,y) < downLeft(x,y) && right(x,y) <  downRight(x,y) && right(x,y) < down(x,y) ){ // right
-                marshrut.add(0,rightt);
+            end[0] = marshrut.get(marshrut.size() -1 )[0];
+            end[1] = marshrut.get(marshrut.size() -1 )[1];
+          /*  for (int s[]: marshrut){
+                for (int q: s){
+                    System.out.print(q + "   ");
+                }
+                System.out.println(); // todo
             }
-            if (down(x,y) < left(x,y) && down(x,y) < downLeft(x,y) && down(x,y) <  downRight(x,y) && down(x,y) < right(x,y) ) { // down
-                marshrut.add(0, downn);
-            }
-            if (downLeft(x,y) < left(x,y) && downLeft(x,y) < down(x,y) && downLeft(x,y) <  downRight(x,y) && downLeft(x,y) < right(x,y) ) { // downLeft
-                marshrut.add(0, downLeftt);
-            }
-            if (downRight(x,y) < left(x,y) && downRight(x,y) < downLeft(x,y) && downRight(x,y) <  down(x,y) && downRight(x,y) < right(x,y) ) { // downRight
-                marshrut.add(0, downRightt);
-            }
-
-
-        } else if (x == 0 && y < SHIRINA_MASSIVA -1 && y > 0) {
-            if (right(x,y) < up(x,y) && right(x,y) < upRight(x,y) && right(x,y) <  downRight(x,y) && right(x,y) < down(x,y) ){ // right
-                marshrut.add(0,rightt);
-            }
-            if (down(x,y) < up(x,y) && down(x,y) < upRight(x,y) && down(x,y) <  right(x,y) && down(x,y) < downRight(x,y) ) { // down
-                marshrut.add(0, downn);
-            }
-            if (upRight(x,y) < up(x,y) && upRight(x,y) < right(x,y) && upRight(x,y) <  downRight(x,y) && upRight(x,y) < down(x,y) ) { // upRight
-                marshrut.add(0, upRightt);
-            }
-            if (downRight(x,y) < up(x,y) && downRight(x,y) < upRight(x,y) && downRight(x,y) <  right(x,y) && downRight(x,y) < down(x,y) ) { // downRight
-                marshrut.add(0, downRightt);
-            }
-        } else if (x == 0 && y == 0) {
-            if (right(x,y) < downRight(x,y) && right(x,y) < down(x,y) ){ // right
-                marshrut.add(0,rightt);
-            }
-            if (down(x,y) < right(x,y) && down(x,y) < downRight(x,y) ) { // down
-                marshrut.add(0, downn);
-            }
-            if (downRight(x,y) < right(x,y) && downRight(x,y) < down(x,y) ) { // downRight
-                marshrut.add(0, downRightt);
-            }
-            } else if (x == 0 && y == SHIRINA_MASSIVA -1) {
-            if (right(x,y) < upRight(x,y) && left(x,y) < up(x,y)){ // right
-                marshrut.add(0,rightt);
-            }
-            if (up(x,y) < upRight(x,y) && up(x,y) < right(x,y)) { // up
-                marshrut.add(0, upp);
-            }
-            if (upRight(x,y) < up(x,y) && upRight(x,y) < right(x,y) ) { // upRight
-                marshrut.add(0, upRightt);
-            }
-        } else if (x > 0 && x < DLINNA_MASSIVA -1  && y == SHIRINA_MASSIVA -1) {
-            if (left(x,y) < upLeft(x,y) && left(x,y) < up(x,y) && left(x,y) <  upRight(x,y) && left(x,y) < right(x,y) ){ // left
-                marshrut.add(0,leftt);
-            }
-            if (right(x,y) < left(x,y) && right(x,y) < upRight(x,y) && right(x,y) <  up(x,y) && right(x,y) < upRight(x,y) ) { // right
-                marshrut.add(0, rightt);
-            }
-            if (upLeft(x,y) < left(x,y) && upLeft(x,y) < up(x,y) && upLeft(x,y) <  upRight(x,y) && upLeft(x,y) < right(x,y) ) { // upLeft
-                marshrut.add(0, upLeftt);
-            }
-            if (upRight(x,y) < left(x,y) && upRight(x,y) < up(x,y) && upRight(x,y) <  upLeft(x,y) && upRight(x,y) < right(x,y) ) { // upRight
-                marshrut.add(0, upRightt);
-            }
-            if (up(x,y) < left(x,y) && up(x,y) < upLeft(x,y) && up(x,y) <  upRight(x,y) && up(x,y) < right(x,y) ) { // up
-                marshrut.add(0, upRightt);
-            }
-        } else if(x == DLINNA_MASSIVA -1 && y == 0) {
-            if (left(x,y) < downLeft(x,y) && left(x,y) < down(x,y)){ // left
-                marshrut.add(0,leftt);
-            }
-            if (down(x,y) < left(x,y) && down(x,y) < downLeft(x,y)) { // down
-                marshrut.add(0, downn);
-            }
-            if (downLeft(x,y) < left(x,y) && downLeft(x,y) < down(x,y) ) { // downLeft
-                marshrut.add(0, downLeftt);
-            }
-        } else if(x == DLINNA_MASSIVA -1 && y != 0 && y != SHIRINA_MASSIVA -1) {
-            if (left(x,y) < downLeft(x,y) && left(x,y) < down(x,y) && left (x,y)<  up(x,y) && left(x,y) < upLeft (x,y)){ // left
-                marshrut.add(0,leftt);
-            }
-            if (downLeft(x,y) < left(x,y) && downLeft(x,y) < down(x,y) && downLeft(x,y) <  up(x,y) && downLeft(x,y) < upLeft(x,y) ) { // downLeft
-                marshrut.add(0, downLeftt);
-            }
-            if (down(x,y) < left(x,y) && down(x,y) < downLeft(x,y) && down(x,y) <  up(x,y) && down(x,y) < upLeft(x,y) ) { // down
-                marshrut.add(0, downn);
-            }
-            if (up (x,y)< upLeft(x,y) && up(x,y) < left(x,y) && up(x,y) <  downLeft(x,y) && up(x,y) < down(x,y) ) { // up
-                marshrut.add(0, upp);
-            }
-            if (upLeft(x,y) < up (x,y)&& upLeft(x,y) < left (x,y)&& upLeft(x,y) <  downLeft(x,y) && upLeft(x,y) < down(x,y) ) { // upLeft
-                marshrut.add(0, upLeftt);
-            }
-        } else if (x == DLINNA_MASSIVA -1 && y == SHIRINA_MASSIVA -1){
-            if (up(x,y) < upLeft(x,y) && up(x,y) < left(x,y)){ // up
-                marshrut.add(0,upp);
-            }
-            if (left(x,y) < upLeft(x,y) && left(x,y) < up(x,y)){ // left
-                marshrut.add(0,leftt);
-            }
-            if (upLeft(x,y) < left(x,y) && upLeft(x,y) < up(x,y)){ // upLeft
-                marshrut.add(0,upLeftt);
-            }
-        } else{
-            if (left(x,y) < downLeft(x,y) && left(x,y) < down(x,y) && left(x,y) < downRight(x,y) && left(x,y) < right(x,y) && left(x,y) <  upRight(x,y) && left(x,y) <  up(x,y) && left(x,y) < upLeft(x,y) ){ // left
-                marshrut.add(0,leftt);
-            }
-            if (downLeft(x,y) < left(x,y) && downLeft(x,y) < down(x,y) && downLeft(x,y) < downRight(x,y) && downLeft(x,y) < right(x,y) && downLeft(x,y) <  upRight(x,y) && downLeft(x,y) <  up (x,y)&& downLeft(x,y) < upLeft(x,y) ){ // downLeft
-                marshrut.add(0,downLeftt);
-            }
-            if (down(x,y) < left(x,y) && down(x,y) < downLeft(x,y) && down(x,y) < downRight(x,y) && down(x,y) < right(x,y) && down(x,y) <  upRight(x,y) && down(x,y) <  up(x,y) && down(x,y) < upLeft(x,y) ){ // down
-                marshrut.add(0,downn);
-            }
-            if (downRight(x,y) < left(x,y) && downRight(x,y) < downLeft(x,y) && downRight(x,y) < down(x,y) && downRight(x,y) < right(x,y) && downRight(x,y) <  upRight(x,y) && downRight(x,y) <  up(x,y) && downRight(x,y) < upLeft(x,y) ){ // downRight
-                marshrut.add(0,downRightt);
-            }
-            if (right(x,y) < left(x,y) && right(x,y) < downLeft(x,y) && right(x,y) < down(x,y) && right(x,y) < downRight(x,y) && right(x,y) <  upRight(x,y) && right(x,y) <  up(x,y) && right(x,y) < upLeft(x,y) ){ // right
-                marshrut.add(0,rightt);
-            }
-            if (upRight(x,y) < left(x,y) && upRight(x,y) < downLeft(x,y) && upRight(x,y) < down(x,y) && upRight(x,y) < downRight (x,y)&& upRight(x,y) <  right(x,y) && upRight(x,y)<  up(x,y) && upRight(x,y) < upLeft(x,y) ){ // upRight
-                marshrut.add(0,upRightt);
-            }
-            if (up(x,y) < left(x,y) && up(x,y) < downLeft(x,y) && up(x,y) < down(x,y) && up(x,y) < downRight(x,y) && up (x,y)<  right(x,y) && up (x,y)<  upRight(x,y) && up(x,y) < upLeft(x,y) ){ // up
-                marshrut.add(0,upp);
-            }
-            if (upLeft(x,y) < left(x,y) && upLeft(x,y) < downLeft(x,y) && upLeft(x,y) < down(x,y) && upLeft(x,y) < downRight(x,y) && upLeft(x,y) <  right(x,y) && upLeft(x,y) <  upRight(x,y) && upLeft(x,y) < up(x,y) ){ // upLeft
-                marshrut.add(0,upLeftt);
-            }
-
-
-
+            System.out.println();
+*/
         }
 
 return marshrut;

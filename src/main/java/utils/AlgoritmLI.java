@@ -21,7 +21,7 @@ public class AlgoritmLI {
     private double[][] massiv = new double [DLINNA_MASSIVA][SHIRINA_MASSIVA];
     private  boolean izmeneniya;
     private static double WALL = 1_000_000;
-    int chen  = 0;
+    private int chen  = 0;
     private ArrayList<int[]> marshrut;
 /*
     int i = -1;
@@ -426,7 +426,7 @@ return marshrut;
     private boolean UPLEFT (int []vershina, double znachenie, double [][]massiv) {
         if (massiv[vershina[0] - 1][vershina[1]] == WALL || massiv[vershina[0]][vershina[1] -1] == WALL)return false;
         if (massiv[vershina[0] - 1][vershina[1] - 1] == 0) {
-            massiv[vershina[0] - 1][vershina[1] - 1] = new BigDecimal(znachenie + 1.2).setScale(2,5).doubleValue();;
+            massiv[vershina[0] - 1][vershina[1] - 1] = new BigDecimal(znachenie + 1.2).setScale(2,5).doubleValue();
             return true;
         }
         return false;
@@ -435,7 +435,7 @@ return marshrut;
     private boolean UPRIGHT (int []vershina, double znachenie, double [][]massiv) {
         if (massiv[vershina[0] + 1][vershina[1]] == WALL || massiv[vershina[0] ][vershina[1] -1] == WALL ) return false;
         if (massiv[vershina[0] + 1][vershina[1] - 1] == 0) {
-            massiv[vershina[0] + 1][vershina[1] - 1] = new BigDecimal(znachenie + 1.2).setScale(2,5).doubleValue();;
+            massiv[vershina[0] + 1][vershina[1] - 1] = new BigDecimal(znachenie + 1.2).setScale(2,5).doubleValue();
             return true;
         }
         return false;
@@ -444,7 +444,7 @@ return marshrut;
     private boolean DOWNLEFT (int []vershina, double znachenie, double [][]massiv) {
         if (massiv[vershina[0] - 1][vershina[1]] == WALL || massiv[vershina[0]][vershina[1] + 1] == WALL) return false;
         if (massiv[vershina[0] - 1][vershina[1] + 1] == 0) {
-            massiv[vershina[0] - 1][vershina[1] + 1] =new BigDecimal(znachenie + 1.2).setScale(2,5).doubleValue();;
+            massiv[vershina[0] - 1][vershina[1] + 1] =new BigDecimal(znachenie + 1.2).setScale(2,5).doubleValue();
             return true;
         }
         return false;
@@ -453,7 +453,7 @@ return marshrut;
     private boolean DOWNRIGHT (int []vershina, double znachenie, double [][]massiv) {
         if (massiv[vershina[0] + 1][vershina[1] ] == WALL || massiv[vershina[0] ][vershina[1] + 1] == WALL) return false;
         if (massiv[vershina[0] + 1][vershina[1] + 1] == 0) {
-            massiv[vershina[0] + 1][vershina[1] + 1] = new BigDecimal(znachenie + 1.2).setScale(2,5).doubleValue();;
+            massiv[vershina[0] + 1][vershina[1] + 1] = new BigDecimal(znachenie + 1.2).setScale(2,5).doubleValue();
             return true;
         }
         return false;

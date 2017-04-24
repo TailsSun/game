@@ -18,21 +18,21 @@ public class AlgoritmLI {
     private static int SHIRINA_MASSIVA = Game.height / MAX_SPEED_EN;
     private double znachenie = 1;
     private static ArrayList<Integer> gameMap = GameMap.getMap();
-    private double[][] massiv = new double [DLINNA_MASSIVA][SHIRINA_MASSIVA];
-    private  boolean izmeneniya;
+    private double[][] MapFoKreatingRoute = new double [DLINNA_MASSIVA][SHIRINA_MASSIVA];
+    private  boolean testTRUE;
     private static double WALL = 1_000_000;
     private int chen  = 0;
-    private ArrayList<int[]> marshrut;
+    private ArrayList<int[]> listRoute;
 /*
     int i = -1;
 */
 
     public AlgoritmLI() {
-        this.massiv = massiv;
+        this.MapFoKreatingRoute = MapFoKreatingRoute;
     }
 
-    public double[][] getMassiv() {
-        return massiv;
+    public double[][] getMapFoKreatingRoute() {
+        return MapFoKreatingRoute;
     }
 
     public static void main(String[] args) {
@@ -40,14 +40,13 @@ public class AlgoritmLI {
         int q = XXMap - 1;
 
         AlgoritmLI li = new AlgoritmLI();
-        li.Init_massiv(MAX_SPEED_EN);
-
+        li.Init_MapFoKreatingRoute(MAX_SPEED_EN);
 
         int mas[] = {0,0};
         int end [] = {19,14};
 
-        if(li.OsnovnoiMetod(mas,li.getMassiv(),end)){
-            ArrayList<int[]> peremennaya = new ArrayList<int[]>(li.PostroenieMarshruta(mas,li.getMassiv(),end));
+        if(li.InitializationWave(mas,li.getMapFoKreatingRoute(),end)){
+            ArrayList<int[]> peremennaya = new ArrayList<int[]>(li.PostroenieMarshruta(mas,li.getMapFoKreatingRoute(),end));
 
             for (int[] res: peremennaya){
                 for (int result:res){
@@ -55,12 +54,7 @@ public class AlgoritmLI {
                 }
                 System.out.println();
             }
-
         }
-
-
-
-
     }
 
     private static void print(double [][] massiv){
@@ -76,62 +70,59 @@ public class AlgoritmLI {
 
     }
 
-    private  void Init_massiv(int speed) { // todo
+    private  void Init_MapFoKreatingRoute(int speed) { // todo
 
         for ( int i = 0; i < gameMap.size(); i ++ ){
             if (gameMap.get(i) == GameMap.WALL){
-                int raznica = GameMap.lengthKub / speed;
-                for (int y = 0; y < raznica; y++) {
-                    for (int x = 0; x < raznica; x ++){
-                        int XX, YY;
+                int mapScale = GameMap.lengthKub / speed;
+                for (int y = 0; y < mapScale; y++) {
+                    for (int x = 0; x < mapScale; x ++){
+                        int XXtemp, YYtemp;
                         if (i > XXMap - 1) {            //если И больше дленны мапы по У
-                            XX = i % XXMap;
+                            XXtemp = i % XXMap;
 
-                        } else XX = i;
+                        } else XXtemp = i;
 
                         if (i > XXMap - 1) {
-                            YY = i / (XXMap);
-                        } else YY = 0;
+                            YYtemp = i / (XXMap);
+                        } else YYtemp = 0;
 
-                         massiv[XX * raznica+ x][YY * raznica + y] = WALL;
+                         MapFoKreatingRoute[XXtemp * mapScale+ x][YYtemp * mapScale + y] = WALL;
                     }
                 }
             }
-
         }
     }
 
-
-    private boolean OsnovnoiMetod(int []vers, double [][]massiv, int []end) {
-        int []vershina = new int[2];
-        vershina[0] = vers[0];
-        vershina[1] = vers[1];
+    private boolean InitializationWave(int []startPoint, double [][]massiv, int []endPoint) {
+        int []tempStartPoint = new int[2];
+        tempStartPoint[0] = startPoint[0];
+        tempStartPoint[1] = startPoint[1];
         massiv[0][0] = 1;
         while (true) {
             for (int i = 0; i < SHIRINA_MASSIVA; i++) {
                 for (int ii = 0; ii < DLINNA_MASSIVA; ii++) {
                     if (massiv[ii][i] == znachenie) {
-                        vershina[0] = ii;
-                        vershina[1] = i;
+                        tempStartPoint[0] = ii;
+                        tempStartPoint[1] = i;
 
-                        if (Metod(vershina, massiv, znachenie)){
-                            izmeneniya = true;
+                        if (addWave(tempStartPoint, massiv, znachenie)){
+                            testTRUE = true;
                             chen = 0;
                         }
-                        else izmeneniya = false;
+                        else testTRUE = false;
                     }
                 }
             }
-            if (!izmeneniya){
+            if (!testTRUE){
                 chen++;
                 if (chen > 11){
                     System.out.println("Изменений нет !!!!");
                     return false;
                 }
-
             }
 
-            if (Arrays.equals(vershina, end)) {
+            if (Arrays.equals(tempStartPoint, endPoint)) {
                 System.out.println("Eaaa");
                 print(massiv);
                 return true;
@@ -143,68 +134,68 @@ public class AlgoritmLI {
     }
 
 
-    private boolean Metod(int []vershina, double [][]massiv, double znachenie) {
-            int x = vershina[0];
-            int y = vershina[1];
+    private boolean addWave(int []startPoint, double [][]initMap, double znachenie) {
+            int x = startPoint[0];
+            int y = startPoint[1];
             if (y == 0 && x < DLINNA_MASSIVA -1 &&  x > 0 ) {
-                if(DOWN(vershina,znachenie,massiv) |
-                        DOWNLEFT(vershina,znachenie,massiv) |
-                        DOWNRIGHT(vershina,znachenie,massiv) |
-                        LEFT(vershina,znachenie,massiv) |
-                        RIGHT(vershina,znachenie,massiv)) return  true;
+                if(DOWN(startPoint,znachenie,initMap) |
+                        DOWNLEFT(startPoint,znachenie,initMap) |
+                        DOWNRIGHT(startPoint,znachenie,initMap) |
+                        LEFT(startPoint,znachenie,initMap) |
+                        RIGHT(startPoint,znachenie,initMap)) return  true;
 
             } else if (x == 0 && y < SHIRINA_MASSIVA -1 && y > 0) {
-                if (RIGHT(vershina, znachenie, massiv) |
-                        UP(vershina, znachenie, massiv) |
-                        DOWN(vershina, znachenie, massiv) |
-                        UPRIGHT(vershina, znachenie, massiv) |
-                        DOWNRIGHT(vershina, znachenie, massiv)) return true;
+                if (RIGHT(startPoint, znachenie, initMap) |
+                        UP(startPoint, znachenie, initMap) |
+                        DOWN(startPoint, znachenie, initMap) |
+                        UPRIGHT(startPoint, znachenie, initMap) |
+                        DOWNRIGHT(startPoint, znachenie, initMap)) return true;
             } else if (x == 0 && y == 0) {
-                if (RIGHT(vershina, znachenie, massiv) |
-                        DOWNRIGHT(vershina, znachenie, massiv) |
-                        DOWN(vershina, znachenie, massiv)) return true;
+                if (RIGHT(startPoint, znachenie, initMap) |
+                        DOWNRIGHT(startPoint, znachenie, initMap) |
+                        DOWN(startPoint, znachenie, initMap)) return true;
             } else if (x == 0 && y == SHIRINA_MASSIVA -1) {
-                if (UP(vershina, znachenie, massiv) |
-                        UPRIGHT(vershina, znachenie, massiv) |
-                        RIGHT(vershina, znachenie, massiv)) return true;
+                if (UP(startPoint, znachenie, initMap) |
+                        UPRIGHT(startPoint, znachenie, initMap) |
+                        RIGHT(startPoint, znachenie, initMap)) return true;
             } else if (x > 0 && x < DLINNA_MASSIVA -1  && y == SHIRINA_MASSIVA -1) {
-                if (UP(vershina, znachenie, massiv) |
-                        UPRIGHT(vershina, znachenie, massiv) |
-                        RIGHT(vershina, znachenie, massiv) |
-                        LEFT(vershina, znachenie, massiv) |
-                        UPLEFT(vershina, znachenie, massiv)) return true;
+                if (UP(startPoint, znachenie, initMap) |
+                        UPRIGHT(startPoint, znachenie, initMap) |
+                        RIGHT(startPoint, znachenie, initMap) |
+                        LEFT(startPoint, znachenie, initMap) |
+                        UPLEFT(startPoint, znachenie, initMap)) return true;
             } else if(x == DLINNA_MASSIVA -1 && y == 0) {
-                if (LEFT(vershina, znachenie, massiv) |
-                        DOWNLEFT(vershina, znachenie, massiv) |
-                        DOWN(vershina, znachenie, massiv)) return true;
+                if (LEFT(startPoint, znachenie, initMap) |
+                        DOWNLEFT(startPoint, znachenie, initMap) |
+                        DOWN(startPoint, znachenie, initMap)) return true;
             } else if(x == DLINNA_MASSIVA -1 && y != 0 && y != SHIRINA_MASSIVA -1) {
-                if (LEFT(vershina, znachenie, massiv) |
-                        DOWNLEFT(vershina, znachenie, massiv) |
-                        UP(vershina, znachenie, massiv) |
-                        UPLEFT(vershina, znachenie, massiv) |
-                        DOWN(vershina, znachenie, massiv)) return true;
+                if (LEFT(startPoint, znachenie, initMap) |
+                        DOWNLEFT(startPoint, znachenie, initMap) |
+                        UP(startPoint, znachenie, initMap) |
+                        UPLEFT(startPoint, znachenie, initMap) |
+                        DOWN(startPoint, znachenie, initMap)) return true;
             } else if (x == DLINNA_MASSIVA -1 && y == SHIRINA_MASSIVA -1){
-                if (UP(vershina, znachenie, massiv) |
-                        UPLEFT(vershina, znachenie, massiv) |
-                        LEFT(vershina, znachenie, massiv)) return true;
+                if (UP(startPoint, znachenie, initMap) |
+                        UPLEFT(startPoint, znachenie, initMap) |
+                        LEFT(startPoint, znachenie, initMap)) return true;
 
             } else{
-                if(RIGHT(vershina, znachenie, massiv) |
-                        LEFT(vershina, znachenie, massiv) |
-                        UP(vershina, znachenie, massiv) |
-                        DOWN(vershina, znachenie, massiv) |
-                        UPRIGHT(vershina, znachenie, massiv) |
-                        UPLEFT(vershina, znachenie, massiv) |
-                        DOWNRIGHT(vershina, znachenie, massiv) |
-                        DOWNLEFT(vershina, znachenie, massiv)) return true;
+                if(RIGHT(startPoint, znachenie, initMap) |
+                        LEFT(startPoint, znachenie, initMap) |
+                        UP(startPoint, znachenie, initMap) |
+                        DOWN(startPoint, znachenie, initMap) |
+                        UPRIGHT(startPoint, znachenie, initMap) |
+                        UPLEFT(startPoint, znachenie, initMap) |
+                        DOWNRIGHT(startPoint, znachenie, initMap) |
+                        DOWNLEFT(startPoint, znachenie, initMap)) return true;
             }
 
         return false;
     }
 
     private ArrayList<int[]> PostroenieMarshruta(int []vershina, double [][]massiv, int []end){
-        marshrut = new ArrayList<int[]>();
-        marshrut.add(end.clone()); // todo
+        listRoute = new ArrayList<int[]>();
+        listRoute.add(end.clone()); // todo
         while (!Arrays.equals(vershina, end)) {
 
 
@@ -222,138 +213,138 @@ public class AlgoritmLI {
 
             if (y == 0 && x < DLINNA_MASSIVA - 1 && x > 0) {
                 if (left(x, y) < downLeft(x, y) && left(x, y) < down(x, y) && left(x, y) < downRight(x, y) && left(x, y) < right(x, y)) { // left
-                    marshrut.add( leftt);
+                    listRoute.add( leftt);
                 }
                 if (right(x, y) < left(x, y) && right(x, y) < downLeft(x, y) && right(x, y) < downRight(x, y) && right(x, y) < down(x, y)) { // right
-                    marshrut.add( rightt);
+                    listRoute.add( rightt);
                 }
                 if (down(x, y) < left(x, y) && down(x, y) < downLeft(x, y) && down(x, y) < downRight(x, y) && down(x, y) < right(x, y)) { // down
-                    marshrut.add(downn);
+                    listRoute.add(downn);
                 }
                 if (downLeft(x, y) < left(x, y) && downLeft(x, y) < down(x, y) && downLeft(x, y) < downRight(x, y) && downLeft(x, y) < right(x, y)) { // downLeft
-                    marshrut.add( downLeftt);
+                    listRoute.add( downLeftt);
                 }
                 if (downRight(x, y) < left(x, y) && downRight(x, y) < downLeft(x, y) && downRight(x, y) < down(x, y) && downRight(x, y) < right(x, y)) { // downRight
-                    marshrut.add( downRightt);
+                    listRoute.add( downRightt);
                 }
 
 
             } else if (x == 0 && y < SHIRINA_MASSIVA - 1 && y > 0) {
                 if (right(x, y) < up(x, y) && right(x, y) < upRight(x, y) && right(x, y) < downRight(x, y) && right(x, y) < down(x, y)) { // right
-                    marshrut.add( rightt);
+                    listRoute.add( rightt);
                 }
                 if (down(x, y) < up(x, y) && down(x, y) < upRight(x, y) && down(x, y) < right(x, y) && down(x, y) < downRight(x, y)) { // down
-                    marshrut.add( downn);
+                    listRoute.add( downn);
                 }
                 if (upRight(x, y) < up(x, y) && upRight(x, y) < right(x, y) && upRight(x, y) < downRight(x, y) && upRight(x, y) < down(x, y)) { // upRight
-                    marshrut.add( upRightt);
+                    listRoute.add( upRightt);
                 }
                 if (downRight(x, y) < up(x, y) && downRight(x, y) < upRight(x, y) && downRight(x, y) < right(x, y) && downRight(x, y) < down(x, y)) { // downRight
-                    marshrut.add(downRightt);
+                    listRoute.add(downRightt);
                 }
             } else if (x == 0 && y == 0) {
                 if (right(x, y) < downRight(x, y) && right(x, y) < down(x, y)) { // right
-                    marshrut.add( rightt);
+                    listRoute.add( rightt);
                 }
                 if (down(x, y) < right(x, y) && down(x, y) < downRight(x, y)) { // down
-                    marshrut.add( downn);
+                    listRoute.add( downn);
                 }
                 if (downRight(x, y) < right(x, y) && downRight(x, y) < down(x, y)) { // downRight
-                    marshrut.add( downRightt);
+                    listRoute.add( downRightt);
                 }
             } else if (x == 0 && y == SHIRINA_MASSIVA - 1) {
                 if (right(x, y) < upRight(x, y) && left(x, y) < up(x, y)) { // right
-                    marshrut.add( rightt);
+                    listRoute.add( rightt);
                 }
                 if (up(x, y) < upRight(x, y) && up(x, y) < right(x, y)) { // up
-                    marshrut.add( upp);
+                    listRoute.add( upp);
                 }
                 if (upRight(x, y) < up(x, y) && upRight(x, y) < right(x, y)) { // upRight
-                    marshrut.add( upRightt);
+                    listRoute.add( upRightt);
                 }
             } else if (x > 0 && x < DLINNA_MASSIVA - 1 && y == SHIRINA_MASSIVA - 1) {
                 if (left(x, y) < upLeft(x, y) && left(x, y) < up(x, y) && left(x, y) < upRight(x, y) && left(x, y) < right(x, y)) { // left
-                    marshrut.add( leftt);
+                    listRoute.add( leftt);
                 }
                 if (right(x, y) < left(x, y) && right(x, y) < upRight(x, y) && right(x, y) < up(x, y) && right(x, y) < upRight(x, y)) { // right
-                    marshrut.add( rightt);
+                    listRoute.add( rightt);
                 }
                 if (upLeft(x, y) < left(x, y) && upLeft(x, y) < up(x, y) && upLeft(x, y) < upRight(x, y) && upLeft(x, y) < right(x, y)) { // upLeft
-                    marshrut.add( upLeftt);
+                    listRoute.add( upLeftt);
                 }
                 if (upRight(x, y) < left(x, y) && upRight(x, y) < up(x, y) && upRight(x, y) < upLeft(x, y) && upRight(x, y) < right(x, y)) { // upRight
-                    marshrut.add( upRightt);
+                    listRoute.add( upRightt);
                 }
                 if (up(x, y) < left(x, y) && up(x, y) < upLeft(x, y) && up(x, y) < upRight(x, y) && up(x, y) < right(x, y)) { // up
-                    marshrut.add( upRightt);
+                    listRoute.add( upRightt);
                 }
             } else if (x == DLINNA_MASSIVA - 1 && y == 0) {
                 if (left(x, y) < downLeft(x, y) && left(x, y) < down(x, y)) { // left
-                    marshrut.add( leftt);
+                    listRoute.add( leftt);
                 }
                 if (down(x, y) < left(x, y) && down(x, y) < downLeft(x, y)) { // down
-                    marshrut.add( downn);
+                    listRoute.add( downn);
                 }
                 if (downLeft(x, y) < left(x, y) && downLeft(x, y) < down(x, y)) { // downLeft
-                    marshrut.add( downLeftt);
+                    listRoute.add( downLeftt);
                 }
             } else if (x == DLINNA_MASSIVA - 1 && y != 0 && y != SHIRINA_MASSIVA - 1) {
                 if (left(x, y) < downLeft(x, y) && left(x, y) < down(x, y) && left(x, y) < up(x, y) && left(x, y) < upLeft(x, y)) { // left
-                    marshrut.add( leftt);
+                    listRoute.add( leftt);
                 }
                 if (downLeft(x, y) < left(x, y) && downLeft(x, y) < down(x, y) && downLeft(x, y) < up(x, y) && downLeft(x, y) < upLeft(x, y)) { // downLeft
-                    marshrut.add( downLeftt);
+                    listRoute.add( downLeftt);
                 }
                 if (down(x, y) < left(x, y) && down(x, y) < downLeft(x, y) && down(x, y) < up(x, y) && down(x, y) < upLeft(x, y)) { // down
-                    marshrut.add( downn);
+                    listRoute.add( downn);
                 }
                 if (up(x, y) < upLeft(x, y) && up(x, y) < left(x, y) && up(x, y) < downLeft(x, y) && up(x, y) < down(x, y)) { // up
-                    marshrut.add( upp);
+                    listRoute.add( upp);
                 }
                 if (upLeft(x, y) < up(x, y) && upLeft(x, y) < left(x, y) && upLeft(x, y) < downLeft(x, y) && upLeft(x, y) < down(x, y)) { // upLeft
-                    marshrut.add( upLeftt);
+                    listRoute.add( upLeftt);
                 }
             } else if (x == DLINNA_MASSIVA - 1 && y == SHIRINA_MASSIVA - 1) {
                 if (up(x, y) < upLeft(x, y) && up(x, y) < left(x, y)) { // up
-                    marshrut.add( upp);
+                    listRoute.add( upp);
                 }
                 if (left(x, y) < upLeft(x, y) && left(x, y) < up(x, y)) { // left
-                    marshrut.add( leftt);
+                    listRoute.add( leftt);
                 }
                 if (upLeft(x, y) < left(x, y) && upLeft(x, y) < up(x, y)) { // upLeft
-                    marshrut.add( upLeftt);
+                    listRoute.add( upLeftt);
                 }
             } else {
                 if (left(x, y) < downLeft(x, y) && left(x, y) < down(x, y) && left(x, y) < downRight(x, y) && left(x, y) < right(x, y) && left(x, y) < upRight(x, y) && left(x, y) < up(x, y) && left(x, y) < upLeft(x, y)) { // left
-                    marshrut.add( leftt);
+                    listRoute.add( leftt);
                 }
                 else if (downLeft(x, y) < left(x, y) && downLeft(x, y) < down(x, y) && downLeft(x, y) < downRight(x, y) && downLeft(x, y) < right(x, y) && downLeft(x, y) < upRight(x, y) && downLeft(x, y) < up(x, y) && downLeft(x, y) < upLeft(x, y)) { // downLeft
-                    marshrut.add( downLeftt);
+                    listRoute.add( downLeftt);
                 }
                 else if (down(x, y) < left(x, y) && down(x, y) < downLeft(x, y) && down(x, y) < downRight(x, y) && down(x, y) < right(x, y) && down(x, y) < upRight(x, y) && down(x, y) < up(x, y) && down(x, y) < upLeft(x, y)) { // down
-                    marshrut.add( downn);
+                    listRoute.add( downn);
                 }
                 else if (downRight(x, y) < left(x, y) && downRight(x, y) < downLeft(x, y) && downRight(x, y) < down(x, y) && downRight(x, y) < right(x, y) && downRight(x, y) < upRight(x, y) && downRight(x, y) < up(x, y) && downRight(x, y) < upLeft(x, y)) { // downRight
-                    marshrut.add( downRightt);
+                    listRoute.add( downRightt);
                 }
                 else if (right(x, y) < left(x, y) && right(x, y) < downLeft(x, y) && right(x, y) < down(x, y) && right(x, y) < downRight(x, y) && right(x, y) < upRight(x, y) && right(x, y) < up(x, y) && right(x, y) < upLeft(x, y)) { // right
-                    marshrut.add( rightt);
+                    listRoute.add( rightt);
                 }
                 else if (upRight(x, y) < left(x, y) && upRight(x, y) < downLeft(x, y) && upRight(x, y) < down(x, y) && upRight(x, y) < downRight(x, y) && upRight(x, y) < right(x, y) && upRight(x, y) < up(x, y) && upRight(x, y) < upLeft(x, y)) { // upRight
-                    marshrut.add( upRightt);
+                    listRoute.add( upRightt);
                 }
                 else if (up(x, y) < left(x, y) && up(x, y) < downLeft(x, y) && up(x, y) < down(x, y) && up(x, y) < downRight(x, y) && up(x, y) < right(x, y) && up(x, y) < upRight(x, y) && up(x, y) < upLeft(x, y)) { // up
-                    marshrut.add( upp);
+                    listRoute.add( upp);
                 }
                 else if (upLeft(x, y) < left(x, y) && upLeft(x, y) < downLeft(x, y) && upLeft(x, y) < down(x, y) && upLeft(x, y) < downRight(x, y) && upLeft(x, y) < right(x, y) && upLeft(x, y) < upRight(x, y) && upLeft(x, y) < up(x, y)) { // upLeft
-                    marshrut.add( upLeftt);
+                    listRoute.add( upLeftt);
                 }
 
 
             }
-            end[0] = marshrut.get(marshrut.size() -1 )[0];
-            end[1] = marshrut.get(marshrut.size() -1 )[1];
-          /*  for (int s[]: marshrut){
+            end[0] = listRoute.get(listRoute.size() -1 )[0];
+            end[1] = listRoute.get(listRoute.size() -1 )[1];
+          /*  for (int s[]: listRoute){
                 for (int q: s){
                     System.out.print(q + "   ");
                 }
@@ -363,34 +354,34 @@ public class AlgoritmLI {
 */
         }
 
-return marshrut;
+return listRoute;
     }
 
     private double left(int x, int y) {
-        return massiv[x - 1][y];
+        return MapFoKreatingRoute[x - 1][y];
     }
     private double right (int x, int y) {
-        return massiv[x + 1][y];
+        return MapFoKreatingRoute[x + 1][y];
     }
     private double up(int x, int y) {
-        return massiv[x][y - 1];
+        return MapFoKreatingRoute[x][y - 1];
     }
     private double down(int x, int y) {
-        return massiv[x][y + 1];
+        return MapFoKreatingRoute[x][y + 1];
     }
     private double downRight(int x, int y) {
-        return massiv[x + 1][y + 1];
+        return MapFoKreatingRoute[x + 1][y + 1];
     }
 
     private double downLeft(int x, int y) {
-        return  massiv[x - 1][y + 1];
+        return  MapFoKreatingRoute[x - 1][y + 1];
     }
 
     private double upRight (int x, int y) {
-        return massiv[x + 1][y - 1];
+        return MapFoKreatingRoute[x + 1][y - 1];
     }
     private double upLeft(int x, int y) {
-        return massiv[x - 1][y - 1];
+        return MapFoKreatingRoute[x - 1][y - 1];
     }
 
     private boolean UP (int []vershina, double znachenie, double [][]massiv) {

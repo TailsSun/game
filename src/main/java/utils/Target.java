@@ -48,8 +48,4 @@ public  class Target {
         }
         return false;
     }
-
-
-
-
 }

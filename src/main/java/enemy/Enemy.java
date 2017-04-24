@@ -13,7 +13,7 @@ public class Enemy {
     boolean ifDetectedGG;
     private double x;
     private  double y;
-    public double speed = 2;
+    private double speed = 2;
     private int nap;
 
     private static ArrayList<Enemy> enemieList;
@@ -28,6 +28,9 @@ public class Enemy {
         this.nap = nap;
     }
 
+    public double getSpeed() {
+        return speed;
+    }
 
     public double getX() {
         return x;
@@ -40,6 +43,7 @@ public class Enemy {
     public static ArrayList<Enemy> getEnemieList() {
         return enemieList;
     }
+
     public void update(){
         EventEnemy.eventSpawnEn();
         if (!ifDetectedGG){

@@ -12,7 +12,7 @@ import static game.Game.width;
  */
 public class GameMap {
 
-    public static final int lengthKub = 100;
+    public static final int lengthKub = 40;
     private static final int PercentageImpassableObjects = 15;
     public static final int WALL = 2;
     public static final int NOT_WALL = 1;
@@ -46,7 +46,7 @@ public class GameMap {
                 map.add(WALL);
             }
             else map.add(NOT_WALL);
-           /* if (x ==80){
+           /* if (x ==20){
                 map.add(2);
             }
             else map.add(1);*/
@@ -79,6 +79,5 @@ public class GameMap {
             }
         }
     }
-
 
 }

@@ -13,7 +13,7 @@ import static map.GameMap.lengthKub;
  * Created by DNS on 15.04.2017.
  */
 public  class Target {
-     static int XXMap = width / lengthKub;
+     public static int XXMap = width / lengthKub;
 /*
      int YYMap = height / lengthKub;
 */
@@ -26,7 +26,7 @@ public  class Target {
 
              if (map.get(i) == GameMap.WALL) {   //проверяем только стены ==2
 
-                int XX, YY;
+                 int XX, YY;
                  if (i > XXMap - 1) {            //если И больше дленны мапы по У
                      XX = i % XXMap;
 

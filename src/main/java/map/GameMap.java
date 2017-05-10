@@ -46,10 +46,10 @@ public class GameMap {
                 map.add(WALL);
             }
             else map.add(NOT_WALL);
-           /* if (x ==20){
-                map.add(2);
-            }
-            else map.add(1);*/
+//            if (x ==-1){
+//                map.add(2);
+//            }
+//            else map.add(1);
 
         }
 
@@ -59,8 +59,8 @@ public class GameMap {
         for(int i = 0; i < map.size(); i++) {
             graf.setColor(Color.MAGENTA);
             if (map.get(i) == WALL){
-                int XX,YY;
 
+                int XX,YY;
                 if (i > XXMap - 1) {            //если И больше дленны мапы по У
                     XX = i % XXMap;
 

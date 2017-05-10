@@ -4,6 +4,7 @@ import bullet.BuletGG;
 import displey.Displey;
 import enemy.Enemy;
 import enemy.GraphisEn;
+import event.EventEnemy;
 import grafika.CutTexture;
 import keyboard.Keyboard;
 import map.GameMap;
@@ -13,6 +14,7 @@ import utils.Time;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -44,6 +46,7 @@ public class Game implements Runnable{
     public static final float updPhisika = 60.0f;
 
     public static LinkedList<BuletGG> buletsGG;
+    private static ArrayList<Enemy> enemieList;
     public static final long speedShoot = Time.SEKOND;
     long lastShot = 0;
 /*
@@ -159,17 +162,13 @@ public class Game implements Runnable{
                 i--;
             }
         }
+        EventEnemy.eventSpawnEn();
 
         if (Enemy.getEnemieList() != null && !Enemy.getEnemieList().isEmpty()){
-            for (Enemy enemy:Enemy.getEnemieList()){
-                enemy.update();
+            for (int i = 0; i < Enemy.getEnemieList().size(); i++){
+                Enemy.getEnemieList().get(i).update();
             }
         }
-
-        Enemy.updata();
-
-
-
 
     }
 
@@ -177,6 +176,7 @@ public class Game implements Runnable{
         Displey.clear();
         // mapa
         gameMap.draw(graphics);
+        GraphisEn.draw(graphics);
 
         // gg
         BufferedImage h = cutTexture.cut(18,21,44,44);
@@ -190,7 +190,7 @@ public class Game implements Runnable{
 
         // enemy
 
-        GraphisEn.draw(graphics);
+
 
         Displey.swapBuffers();
     }

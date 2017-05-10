@@ -20,12 +20,14 @@ public class GraphisEn {
 
 
     public static void draw(Graphics2D graphics) {
+        CutTexture cutTexture = new CutTexture(Game.enemyPic);
         if(Enemy.getEnemieList() != null && !Enemy.getEnemieList().isEmpty()) {
-            for (Enemy enemy:Enemy.getEnemieList()) {
-                double x = enemy.getX();
-                double y = enemy.getY();
-                CutTexture cutTexture = new CutTexture(Game.enemyPic);
+            for (int i = 0; i < Enemy.getEnemieList().size(); i++) {
+                double x = Enemy.getEnemieList().get(i).getX();
+                double y = Enemy.getEnemieList().get(i).getY();
+
                 BufferedImage h = cutTexture.cut(6, 9, 38, 40);
+
                 graphics.drawImage(h.getScaledInstance(widthEn, widthEn, 2), (int) x, (int) y, null);
             }
         }

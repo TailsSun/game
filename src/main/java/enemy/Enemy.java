@@ -1,8 +1,13 @@
 package enemy;
 
-import event.EventEnemy;
+import map.GameMap;
+import utils.DekoderListMAPinX_Y;
+import utils.algoritmLi.AlgoritmLI;
 
+import java.awt.*;
 import java.util.ArrayList;
+
+import static map.GameMap.WALL;
 
 /**
  * 6/9    38/40
@@ -10,58 +15,82 @@ import java.util.ArrayList;
  */
 public class Enemy {
 
+    private static ArrayList<Enemy> enemieList = new ArrayList<>();
     boolean ifDetectedGG;
-    private double x;
-    private  double y;
-    private double speed = 2;
-    private int nap;
+    ArrayList<int[]> kreatingRoute = null;
+    private int x;
+    private int y;
+    private double speed = 1;
+    private int course;
+    private boolean nalichieMarshruta = false;
 
-    private static ArrayList<Enemy> enemieList;
-
-
-
-    public Enemy() {
+    public Enemy(int x, int y) {
         this.ifDetectedGG = ifDetectedGG;
-        this.x = 0; //todo
-        this.y = 0;
+        this.x = x;
+        this.y = y;
         this.speed = speed;
-        this.nap = nap;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
+        this.course = course;
     }
 
     public static ArrayList<Enemy> getEnemieList() {
         return enemieList;
     }
 
-    public void update(){
-        EventEnemy.eventSpawnEn();
-        if (!ifDetectedGG){
-
-        }
-
+    public double getSpeed() {
+        return speed;
     }
 
-    public void remuve(ArrayList<Enemy> list){
-        if(list != null && !list.isEmpty()) {
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void remuve(ArrayList<Enemy> list) {
+        if (list != null && !list.isEmpty()) {
             for (int x = 0; x > list.size(); x++) {
+            }
+        }
+    }
+
+    public void update() {
+
+        if (!nalichieMarshruta) {
+            int indexMap = (int) (Math.random() * GameMap.getMap().size());
+            int getValue = GameMap.getMap().get(indexMap);
+
+            if (getValue != WALL) {
+                AlgoritmLI li = new AlgoritmLI();
+                int end[] = {DekoderListMAPinX_Y.decoder(indexMap)[0], DekoderListMAPinX_Y.decoder(indexMap)[1]};
+                int mas[] = {x, y};
+                if (li.InitializationWave(mas[0], mas[1], end)) {
+                    kreatingRoute = new ArrayList<>(li.PostroenieMarshruta(mas, end));
+
+                    nalichieMarshruta = true;
+                } else nalichieMarshruta = false;
 
             }
         }
+        if (nalichieMarshruta) {
+            if (kreatingRoute.size() == 1) nalichieMarshruta = false;
+            setX(kreatingRoute.get(kreatingRoute.size()-1)[0]);
+            setY(kreatingRoute.get(kreatingRoute.size()-1)[1]);
+            kreatingRoute.remove(kreatingRoute.size()-1);
+        }
 
     }
 
-    public static void updata() {
-
+    public void draw(Graphics2D graf) {
+        GraphisEn.draw(graf);
     }
 }

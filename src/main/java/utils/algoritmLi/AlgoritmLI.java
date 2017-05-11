@@ -16,35 +16,23 @@ public class AlgoritmLI {
     public static int DLINNA_MASSIVA = Game.width / MAX_SPEED_EN;
     public static int SHIRINA_MASSIVA = Game.height / MAX_SPEED_EN;
     double[][] MapFoKreatingRoute;
+    ArrayList<int[]> temp;
     private double znachenie = 1;
     private boolean testTRUE;
     private int chen = 0;
     private ArrayList<int[]> listRoute;
-    ArrayList<int[]> temp;
 
     public AlgoritmLI() {
 
     }
 
-//    private void print(double[][] massiv) {
-//        for (int i = 0; i < SHIRINA_MASSIVA; i++) {
-//            for (int ii = 0; ii < DLINNA_MASSIVA; ii++) {
-//                System.out.print(massiv[ii][i] + "  ");
-//            }
-//            System.out.println();
-//        }
-//        System.out.println();
-//        System.out.println();
-//        System.out.println();
-//
-//    }
 
     public boolean InitializationWave(int x, int y, int[] endPoint) {
 
         temp = new ArrayList<>();
 
         ArrayList<int[]> _localTmp = new ArrayList<>();
-        _localTmp.add(new int[]{x,y});
+        _localTmp.add(new int[]{x, y});
         RebildingMap rebildingMap = new RebildingMap();
         rebildingMap.Init_MapFoKreatingRoute(MAX_SPEED_EN);
         MapFoKreatingRoute = rebildingMap.getMapFoKreatingRoute().clone();
@@ -52,42 +40,34 @@ public class AlgoritmLI {
         MapFoKreatingRoute[x][y] = 1;
         while (true) {
             for (int i = 0; i < _localTmp.size(); i++) {
-                        int[] q = Arrays.copyOf(_localTmp.get(i),2);
+                int[] q = Arrays.copyOf(_localTmp.get(i), 2);
 
 
-                        if (q[0] == endPoint[0] && q[1] == endPoint[1]) {
-                            System.out.println("Eaaa");
-                            return true;  //путь найден
-                        }
+                if (q[0] == endPoint[0] && q[1] == endPoint[1]) {
+                    System.out.println("Eaaa");
+                    return true;  //путь найден
+                }
 
-                        if (addWave(q, MapFoKreatingRoute, znachenie)) {
-                            testTRUE = true;
-                            chen = 0;
+                if (addWave(q, MapFoKreatingRoute, znachenie)) {
+                    testTRUE = true;
+                    chen = 0;
 
-                        } else testTRUE = false;
-
-
+                } else testTRUE = false;
             }
             if (!testTRUE) {
                 chen++;
                 if (chen > 2) {
                     System.out.println("Изменений нет !!!!");
-
                     return false;
-
-
                 }
-
-
             }
             _localTmp = new ArrayList<>(temp);
             temp.clear();
-            znachenie ++;
+            znachenie++;
             BigDecimal bd = new BigDecimal(znachenie);
             znachenie = bd.setScale(2, 5).doubleValue();
         }
     }
-
 
     private boolean addWave(int[] startPoint, double[][] MapFoKreatingRoute, double znachenie) {
 
@@ -106,30 +86,36 @@ public class AlgoritmLI {
                     DOWN(startPoint, znachenie, MapFoKreatingRoute) |
                     UPRIGHT(startPoint, znachenie, MapFoKreatingRoute) |
                     DOWNRIGHT(startPoint, znachenie, MapFoKreatingRoute)) return true;
+
         } else if (x == 0 && y == 0) {
             if (RIGHT(startPoint, znachenie, MapFoKreatingRoute) |
                     DOWNRIGHT(startPoint, znachenie, MapFoKreatingRoute) |
                     DOWN(startPoint, znachenie, MapFoKreatingRoute)) return true;
+
         } else if (x == 0 && y == SHIRINA_MASSIVA - 1) {
             if (UP(startPoint, znachenie, MapFoKreatingRoute) |
                     UPRIGHT(startPoint, znachenie, MapFoKreatingRoute) |
                     RIGHT(startPoint, znachenie, MapFoKreatingRoute)) return true;
+
         } else if (x > 0 && x < DLINNA_MASSIVA - 1 && y == SHIRINA_MASSIVA - 1) {
             if (UP(startPoint, znachenie, MapFoKreatingRoute) |
                     UPRIGHT(startPoint, znachenie, MapFoKreatingRoute) |
                     RIGHT(startPoint, znachenie, MapFoKreatingRoute) |
                     LEFT(startPoint, znachenie, MapFoKreatingRoute) |
                     UPLEFT(startPoint, znachenie, MapFoKreatingRoute)) return true;
+
         } else if (x == DLINNA_MASSIVA - 1 && y == 0) {
             if (LEFT(startPoint, znachenie, MapFoKreatingRoute) |
                     DOWNLEFT(startPoint, znachenie, MapFoKreatingRoute) |
                     DOWN(startPoint, znachenie, MapFoKreatingRoute)) return true;
+
         } else if (x == DLINNA_MASSIVA - 1 && y != 0 && y != SHIRINA_MASSIVA - 1) {
             if (LEFT(startPoint, znachenie, MapFoKreatingRoute) |
                     DOWNLEFT(startPoint, znachenie, MapFoKreatingRoute) |
                     UP(startPoint, znachenie, MapFoKreatingRoute) |
                     UPLEFT(startPoint, znachenie, MapFoKreatingRoute) |
                     DOWN(startPoint, znachenie, MapFoKreatingRoute)) return true;
+
         } else if (x == DLINNA_MASSIVA - 1 && y == SHIRINA_MASSIVA - 1) {
             if (UP(startPoint, znachenie, MapFoKreatingRoute) |
                     UPLEFT(startPoint, znachenie, MapFoKreatingRoute) |
@@ -158,8 +144,6 @@ public class AlgoritmLI {
         while (!Arrays.equals(vershina, end)) {
             int x = end[0];
             int y = end[1];
-
-
             int leftt[] = {x - 1, y};
             int rightt[] = {x + 1, y};
             int upp[] = {x, y - 1};
@@ -339,7 +323,7 @@ public class AlgoritmLI {
     private boolean UP(int[] vershina, double znachenie, double[][] massiv) {
         if (massiv[vershina[0]][vershina[1] - 1] == 0) {
             massiv[vershina[0]][vershina[1] - 1] = znachenie + 1;// клетка выше
-            int[] q ={vershina[0],vershina[1] - 1};
+            int[] q = {vershina[0], vershina[1] - 1};
             temp.add(q);
             return true;
         }
@@ -349,7 +333,7 @@ public class AlgoritmLI {
     private boolean DOWN(int[] vershina, double znachenie, double[][] massiv) {
         if (massiv[vershina[0]][vershina[1] + 1] == 0) {
             massiv[vershina[0]][vershina[1] + 1] = znachenie + 1;
-            int[] q ={vershina[0],vershina[1] + 1};
+            int[] q = {vershina[0], vershina[1] + 1};
             temp.add(q);
             return true;
         }
@@ -359,7 +343,7 @@ public class AlgoritmLI {
     private boolean RIGHT(int[] vershina, double znachenie, double[][] massiv) {
         if (massiv[vershina[0] + 1][vershina[1]] == 0) {
             massiv[vershina[0] + 1][vershina[1]] = znachenie + 1;       // клетка правее
-            int[] q ={vershina[0] + 1,vershina[1]};
+            int[] q = {vershina[0] + 1, vershina[1]};
             temp.add(q);
             return true;
         }
@@ -369,7 +353,7 @@ public class AlgoritmLI {
     private boolean LEFT(int[] vershina, double znachenie, double[][] massiv) {
         if (massiv[vershina[0] - 1][vershina[1]] == 0) {
             massiv[vershina[0] - 1][vershina[1]] = znachenie + 1;       // клетка левее
-            int[] q ={vershina[0] - 1,vershina[1]};
+            int[] q = {vershina[0] - 1, vershina[1]};
             temp.add(q);
             return true;
         }
@@ -380,7 +364,7 @@ public class AlgoritmLI {
         if (massiv[vershina[0] - 1][vershina[1]] == WALL || massiv[vershina[0]][vershina[1] - 1] == WALL) return false;
         if (massiv[vershina[0] - 1][vershina[1] - 1] == 0) {
             massiv[vershina[0] - 1][vershina[1] - 1] = new BigDecimal(znachenie + 1.2).setScale(2, 5).doubleValue();
-            int[] q ={vershina[0] - 1,vershina[1] - 1};
+            int[] q = {vershina[0] - 1, vershina[1] - 1};
             temp.add(q);
             return true;
         }
@@ -391,7 +375,7 @@ public class AlgoritmLI {
         if (massiv[vershina[0] + 1][vershina[1]] == WALL || massiv[vershina[0]][vershina[1] - 1] == WALL) return false;
         if (massiv[vershina[0] + 1][vershina[1] - 1] == 0) {
             massiv[vershina[0] + 1][vershina[1] - 1] = new BigDecimal(znachenie + 1.2).setScale(2, 5).doubleValue();
-            int[] q ={vershina[0] + 1,vershina[1] - 1};
+            int[] q = {vershina[0] + 1, vershina[1] - 1};
             temp.add(q);
             return true;
         }
@@ -402,7 +386,7 @@ public class AlgoritmLI {
         if (massiv[vershina[0] - 1][vershina[1]] == WALL || massiv[vershina[0]][vershina[1] + 1] == WALL) return false;
         if (massiv[vershina[0] - 1][vershina[1] + 1] == 0) {
             massiv[vershina[0] - 1][vershina[1] + 1] = new BigDecimal(znachenie + 1.2).setScale(2, 5).doubleValue();
-            int[] q ={vershina[0] - 1,vershina[1] + 1};
+            int[] q = {vershina[0] - 1, vershina[1] + 1};
             temp.add(q);
             return true;
         }
@@ -413,19 +397,12 @@ public class AlgoritmLI {
         if (massiv[vershina[0] + 1][vershina[1]] == WALL || massiv[vershina[0]][vershina[1] + 1] == WALL) return false;
         if (massiv[vershina[0] + 1][vershina[1] + 1] == 0) {
             massiv[vershina[0] + 1][vershina[1] + 1] = new BigDecimal(znachenie + 1.2).setScale(2, 5).doubleValue();
-            int[] q ={vershina[0] + 1,vershina[1] + 1};
+            int[] q = {vershina[0] + 1, vershina[1] + 1};
             temp.add(q);
             return true;
         }
         return false;
     }
-
-    /*private static  int[] MAX(int x, int y, double a1, double a2, double a3){
-        if (x == DLINNA_MASSIVA && y == SHIRINA_MASSIVA){
-
-        }
-    }*/
-
 
 }
 

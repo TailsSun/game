@@ -2,8 +2,6 @@ package utils;
 
 import map.GameMap;
 
-import static map.GameMap.lengthKub;
-
 /**
  * Created by DNS on 24.04.2017.
  */
@@ -22,8 +20,9 @@ public class DekoderListMAPinX_Y {
         if (index > XXMap - 1) {
             YY = index / (XXMap);
         } else YY = 0;
-        XX = XX * lengthKub;
-        YY = YY * lengthKub;
+//        XX = XX * lengthKub;
+//        YY = YY * lengthKub;
+
         int[] result = {XX, YY};
         return result;
     }

@@ -4,7 +4,6 @@ import map.GameMap;
 
 import java.util.ArrayList;
 
-import static map.GameMap.lengthKub;
 import static utils.Target.XXMap;
 import static utils.algoritmLi.AlgoritmLI.DLINNA_MASSIVA;
 import static utils.algoritmLi.AlgoritmLI.SHIRINA_MASSIVA;
@@ -37,14 +36,14 @@ public class RebildingMap {
                 if (i > XXMap - 1) {
                     YY = i / (XXMap);
                 } else YY = 0;
-                XX = XX * lengthKub;
-                YY = YY * lengthKub;
-                for (int y = 0; y < lengthKub; y++) {
-                    for (int x = 0; x < lengthKub; x++) {
-                        MapFoKreatingRoute[XX + x][YY + y] = WALL;
+//                XX = XX * lengthKub;
+//                YY = YY * lengthKub;
+//                for (int y = 0; y < lengthKub; y++) {
+//                    for (int x = 0; x < lengthKub; x++) {
+                        MapFoKreatingRoute[XX ][YY ] = WALL;
 
-                    }
-                }
+//                    }
+//                }
 
             }
         }

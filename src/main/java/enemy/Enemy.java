@@ -82,7 +82,10 @@ public class Enemy {
             }
         }
         if (nalichieMarshruta) {
-            if (kreatingRoute.size() == 1) nalichieMarshruta = false;
+            if (kreatingRoute.size() == 0){
+                nalichieMarshruta = false;
+//                break;
+            }
             setX(kreatingRoute.get(kreatingRoute.size()-1)[0]);
             setY(kreatingRoute.get(kreatingRoute.size()-1)[1]);
             kreatingRoute.remove(kreatingRoute.size()-1);

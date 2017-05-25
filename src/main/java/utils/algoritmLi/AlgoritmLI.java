@@ -12,7 +12,7 @@ import static utils.algoritmLi.RebildingMap.WALL;
  * Created by DNS on 22.04.2017.
  */
 public class AlgoritmLI {
-    public static int MAX_SPEED_EN = 1;
+    public static int MAX_SPEED_EN = 40;
     public static int DLINNA_MASSIVA = Game.width / MAX_SPEED_EN;
     public static int SHIRINA_MASSIVA = Game.height / MAX_SPEED_EN;
     double[][] MapFoKreatingRoute;
@@ -23,6 +23,18 @@ public class AlgoritmLI {
     private ArrayList<int[]> listRoute;
 
     public AlgoritmLI() {
+
+    }
+        private void print(double[][] massiv) {
+        for (int i = 0; i < SHIRINA_MASSIVA; i++) {
+            for (int ii = 0; ii < DLINNA_MASSIVA; ii++) {
+                System.out.print(massiv[ii][i] + "  ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println();
+        System.out.println();
 
     }
 
@@ -45,6 +57,7 @@ public class AlgoritmLI {
 
                 if (q[0] == endPoint[0] && q[1] == endPoint[1]) {
                     System.out.println("Eaaa");
+//                    print(MapFoKreatingRoute);
                     return true;  //путь найден
                 }
 

@@ -41,7 +41,7 @@ public class GameMap {
     public GameMap(){
 
         for (int x = 0; x < S; x++){
-            final double rnd = Math.random()*100;
+            final double rnd = Math.random()*50;
             if (rnd < PercentageImpassableObjects){
                 map.add(WALL);
             }
